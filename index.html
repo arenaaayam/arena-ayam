@@ -63,6 +63,8 @@ body{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;color:var(--dark)
  .body{overflow:visible;padding:10px 12px 96px}
  .bar{position:sticky;bottom:0;z-index:25;padding-top:8px}
 }
+#pv{position:fixed;inset:0;background:rgba(40,20,5,.85);z-index:50;display:flex;align-items:center;justify-content:center;padding:12px}#pv[hidden]{display:none}.pvb{background:var(--cream);border:4px solid var(--dark);border-radius:20px;padding:12px;width:min(94vw,440px);max-height:94dvh;overflow:auto;text-align:center;color:var(--dark)}.pvb img{width:100%;max-height:50dvh;object-fit:contain;border-radius:12px;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto}.pvb p{margin:8px 0;font-weight:600;font-size:.95rem}a.bt{display:inline-block;text-align:center;text-decoration:none}
+#toast{z-index:60}
 </style></head><body>
 <div class="app">
  <div id="v"><div class="logo">STUDIO <b>AYAM</b></div><div class="wm"><span><i class="ig">◎</i>@arenaa.ayam</span><span><i class="tt">♪</i>@arena.ayam</span><span><i class="yt">▶</i>@arena_ayam</span></div><div class="hint">Geser ke samping untuk memutar</div></div>
@@ -83,11 +85,12 @@ body{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;color:var(--dark)
   </div>
  </div>
 </div>
+<div id="pv" hidden><div class="pvb"><b>Kartu ayammu sudah jadi!</b><img id="pvi" alt="Kartu ayam"><p>Kalau belum terunduh: <b>tekan lama gambar</b>, lalu pilih <b>Simpan gambar</b>. Setelah itu kirim gambarnya di <b>kolom komentar</b> video.</p><div class="row"><a class="bt" id="pvd" download>Unduh</a><button class="bt alt" id="pvs" type="button">Bagikan</button><button class="bt alt" id="pvx" type="button">Tutup</button></div></div></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const T=THREE,wrap=document.getElementById("v");
-const R=new T.WebGLRenderer({antialias:true,alpha:true});R.shadowMap.enabled=true;R.shadowMap.type=T.PCFSoftShadowMap;
+const R=new T.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});R.shadowMap.enabled=true;R.shadowMap.type=T.PCFSoftShadowMap;
 R.setPixelRatio(Math.min(devicePixelRatio,2));wrap.appendChild(R.domElement);
 const S=new T.Scene(),C=new T.PerspectiveCamera(40,1,.1,200);
 S.add(new T.HemisphereLight(0xffffff,0x88aa66,.95));
@@ -625,8 +628,9 @@ const pick=a=>a[Math.floor(Math.random()*a.length)];
 $("bRand").onclick=()=>{st={...st,jenis:+(Math.random()<.5),shape:Math.floor(Math.random()*3),cost:Math.floor(Math.random()*10),c1:pick(PALS.c1),c2:pick(PALS.c2),c3:pick(PALS.c3),c4:pick(PALS.c4),c5:pick(PALS.c5)};sync();rebuild()};
 $("bCopy").onclick=async e=>{const t=code();try{await navigator.clipboard.writeText(t)}catch(_){$("code").select();try{document.execCommand("copy")}catch(__){}}const o=e.target.textContent;e.target.textContent="Tersalin ✓";toast("Kode disalin. Tempel di kolom komentar video ya!",5000);setTimeout(()=>e.target.textContent=o,1300)};
 $("code").oninput=e=>{const p=parse(e.target.value);$("msg").textContent=e.target.value.trim()?(p?"Ayam dimuat ✓":"Kode belum valid"):"";if(p){st={...DEF,...p};sync();rebuild();e.target.value=code()}};
-$("bCard").onclick=async()=>{try{await document.fonts.load("900 60px 'Lilita One'")}catch(e){}
- R.setSize(1080,1080,false);C.aspect=1;C.fov=40;C.updateProjectionMatrix();cam();R.render(S,C);
+$("bCard").onclick=async()=>{let pr0=R.getPixelRatio();try{await document.fonts.load("900 60px 'Lilita One'")}catch(e){}
+ try{
+ R.setPixelRatio(1);R.setSize(1080,1080,false);C.aspect=1;C.fov=40;C.updateProjectionMatrix();cam();R.render(S,C);
  const W=1080,H=1500,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
  const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,css(lt(st.c5,.6)));g.addColorStop(.62,st.c5);g.addColorStop(.62,"#c98f4a");g.addColorStop(1,"#a8692f");x.fillStyle=g;x.fillRect(0,0,W,H);
  x.strokeStyle="rgba(90,50,20,.25)";x.lineWidth=4;for(let y=930+90;y<H;y+=90){x.beginPath();x.moveTo(0,y);x.lineTo(W,y);x.stroke()}
@@ -644,8 +648,15 @@ $("bCard").onclick=async()=>{try{await document.fonts.load("900 60px 'Lilita One
   else if(k==="tt"){x.fillStyle="#000";x.beginPath();x.roundRect?x.roundRect(0,0,z,z,12):x.rect(0,0,z,z);x.fill();x.font="900 34px "+F;x.textAlign="center";x.fillStyle="#25f4ee";x.fillText("♪",z/2-2,z*.76-2);x.fillStyle="#fe2c55";x.fillText("♪",z/2+2,z*.76+2);x.fillStyle="#fff";x.fillText("♪",z/2,z*.76)}
   else{x.fillStyle="#f00";x.beginPath();x.roundRect?x.roundRect(0,6,z,32,10):x.rect(0,6,z,32);x.fill();x.fillStyle="#fff";x.beginPath();x.moveTo(17,13);x.lineTo(17,31);x.lineTo(31,22);x.closePath();x.fill()}
   x.restore();x.font="800 30px "+F;x.textAlign="left";x.fillStyle="#fff4dc";x.fillText(h,wx+62,y+39);wx+=w+16});
- fit();
- c.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="ayam-"+(cleanName(st.name).replace("@","")||"ayam")+".png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000);toast("✅ Kartu ayam tersimpan! Sekarang kirim gambarnya di kolom komentar video. Nanti kami seleksi siapa yang tampil. Kalau tidak bisa kirim gambar, tempel kode ayammu.")})};
+ R.setPixelRatio(pr0);fit();
+ c.toBlob(b=>{if(!b){toast("Gagal membuat gambar, coba lagi.");return}
+  const fn="ayam-"+(cleanName(st.name).replace("@","")||"ayam")+".png",du=c.toDataURL("image/png");
+  try{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}catch(e){}
+  showPv(du,b,fn);
+  toast("\u2705 Kartu ayam jadi! Kalau belum terunduh, tekan lama gambarnya lalu Simpan gambar. Setelah itu kirim di kolom komentar video.",9000)})}catch(e){R.setPixelRatio(pr0);fit();toast("Gagal membuat kartu, coba lagi. ("+(e&&e.message||e)+")")}};
+function showPv(du,b,fn){$("pvi").src=du;$("pvd").href=du;$("pvd").download=fn;$("pv").hidden=false;
+ $("pvs").onclick=async()=>{try{const f=new File([b],fn,{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:"Kartu Ayam"});else toast("Tombol bagikan tidak didukung di sini. Tekan lama gambarnya lalu Simpan gambar.")}catch(e){}};
+ $("pvx").onclick=()=>{$("pv").hidden=true}}
 let tt;function toast(m,ms=9000){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("on"),ms)}
 let gd=false;document.addEventListener("click",e=>{if(!gd&&e.target.closest(".chip,.sw,.swpick,.tab,#bRand")){gd=true;$("guide").open=false}});
 // mulai
