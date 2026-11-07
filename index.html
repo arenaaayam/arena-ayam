@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id" data-tema="tikar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arena Ayam - Daftar Ayam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3dca6;--fg:#4a2a12;--card:#fff6df;--ac:#ff8a1f;--mut:#7a5a3a;--line:#5a3414;--ol:#5a3414;--hi:#ffd23f;--err:#c62828;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-tema="tikar"]{--bg:#f3dca6;--fg:#4a2a12;--card:#fff6df;--ac:#ff8a1f;--mut:#7a5a3a;--line:#5a3414;--ol:#5a3414;--hi:#ffd23f;--err:#c62828;color-scheme:light}
+:root[data-tema="kardus"]{--bg:#d9b382;--fg:#3e2a17;--card:#f0d9b5;--ac:#b8742a;--mut:#6b4f33;--line:#6b4423;--ol:#4a2f18;--hi:#fff0c2;--err:#b71c1c;color-scheme:light}
+:root[data-tema="malam"]{--bg:#1c1530;--fg:#fff1d6;--card:#2b2145;--ac:#ffb02e;--mut:#c4b3e0;--line:#0e0a1c;--ol:#0e0a1c;--hi:#ffd23f;--err:#ff8a80;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--bg);background-image:repeating-linear-gradient(45deg,rgba(90,52,20,.08) 0 7px,transparent 7px 14px),repeating-linear-gradient(-45deg,rgba(255,255,255,.16) 0 7px,transparent 7px 14px);color:var(--fg);font-family:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",system-ui,sans-serif;font-weight:500;line-height:1.4}
+:root[data-tema="kardus"] body{background-image:repeating-linear-gradient(90deg,rgba(74,47,24,.10) 0 3px,transparent 3px 10px)}
+main{max-width:760px;margin:0 auto;padding:16px}
+.out{-webkit-text-stroke:7px var(--ol);paint-order:stroke fill;stroke-linejoin:round}
+h1{font-size:2.1rem;margin:0 0 4px;color:var(--hi);letter-spacing:.02em;text-shadow:0 4px 0 var(--ol)}
+h2{font-size:1.5rem;margin:26px 0 10px;color:var(--hi);-webkit-text-stroke:6px var(--ol);paint-order:stroke fill;text-shadow:0 3px 0 var(--ol)}
+.sub{font-weight:600;margin:0 0 14px}
+.panel{background:var(--card);border-radius:22px;padding:16px;border:4px solid var(--ol);box-shadow:0 7px 0 var(--ol)}
+label{font-weight:700;display:block;margin-bottom:6px}
+.inp{display:flex;align-items:center;border:3px solid var(--ol);border-radius:14px;padding:0 12px;background:var(--bg)}
+.inp:focus-within{box-shadow:0 0 0 3px var(--ac)}
+.inp span{color:var(--mut);font-weight:700}
+.inp input{flex:1;border:0;background:transparent;color:var(--fg);font:inherit;font-weight:600;padding:10px 4px;outline:none;min-width:0}
+.err{color:var(--err);min-height:1.3em;margin:4px 0 0;font-size:.9rem;font-weight:600}
+.pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.pick button{border:3px solid var(--ol);background:var(--bg);color:var(--fg);border-radius:16px;padding:6px;font:inherit;font-weight:600;font-size:.85rem;cursor:pointer;transition:transform .12s}
+.pick button[aria-checked="true"]{background:var(--hi);color:#4a2a12;box-shadow:0 5px 0 var(--ol);transform:translateY(-3px)}
+.pick button:focus-visible,.go:focus-visible,.del:focus-visible,.dl:focus-visible,.tema button:focus-visible{outline:3px solid var(--fg);outline-offset:3px}
+.pick img{width:100%;aspect-ratio:1;object-fit:contain;display:block;border-radius:10px}
+.ph{width:100%;aspect-ratio:1;display:grid;place-items:center;color:var(--mut)}
+.go{width:100%;margin-top:16px;border:4px solid var(--ol);border-radius:16px;background:var(--ac);color:#fff;-webkit-text-stroke:5px var(--ol);paint-order:stroke fill;font:inherit;font-weight:700;font-size:1.25rem;padding:10px;cursor:pointer;box-shadow:0 7px 0 var(--ol);transition:transform .08s,box-shadow .08s}
+.go:active{transform:translateY(5px);box-shadow:0 2px 0 var(--ol)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.kartu{border-radius:22px;overflow:hidden;background:var(--card);border:5px solid var(--ol);box-shadow:0 8px 0 var(--ol)}
+.kartu.baru{animation:pop .55s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:scale(.55);opacity:0}100%{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.kartu.baru{animation:none}}
+.kh{background:var(--c);color:#fff;display:flex;justify-content:space-between;padding:6px 12px;font-weight:700;font-size:.85rem;letter-spacing:.06em;border-bottom:4px solid var(--ol);text-shadow:0 2px 0 var(--ol)}
+.kp{background:var(--bg)}
+.kp img{width:100%;aspect-ratio:1;object-fit:contain;display:block}
+.kb{padding:10px 12px 12px}
+.un{font-size:1.5rem;font-weight:700;word-break:break-all;color:var(--hi);-webkit-text-stroke:6px var(--ol);paint-order:stroke fill;text-shadow:0 3px 0 var(--ol)}
+.jn{color:var(--fg);font-weight:600}
+.meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:.8rem;color:var(--mut);font-weight:600;gap:6px;flex-wrap:wrap}
+.del,.dl{border:3px solid var(--ol);background:var(--card);color:var(--fg);border-radius:10px;font:inherit;font-size:.78rem;font-weight:700;padding:2px 9px;cursor:pointer}
+.dl{background:var(--ac);color:#fff;text-shadow:0 1px 0 var(--ol)}
+.btns{display:flex;gap:6px}
+.empty{color:var(--fg);font-weight:600}
+.tema{display:flex;gap:10px;align-items:center;margin:0 0 14px;flex-wrap:wrap}.tema span{font-weight:700}
+.tema button{width:36px;height:36px;border-radius:50%;border:3px solid var(--ol);background:var(--s);cursor:pointer}
+.tema button[aria-checked="true"]{box-shadow:0 0 0 3px var(--hi),0 0 0 6px var(--ol)}
+.rib{display:inline-block;margin:0 0 12px;background:var(--ac);color:#fff;border:3px solid var(--ol);border-radius:999px;padding:2px 16px;font-weight:700;font-size:1rem;-webkit-text-stroke:4px var(--ol);paint-order:stroke fill;box-shadow:0 4px 0 var(--ol)}
+.wm{margin:30px 0 8px;text-align:center;background:var(--card);border:4px solid var(--ol);border-radius:22px;padding:12px;box-shadow:0 7px 0 var(--ol)}
+.wm b{display:block;font-size:1.5rem;color:var(--hi);-webkit-text-stroke:6px var(--ol);paint-order:stroke fill;text-shadow:0 3px 0 var(--ol);margin-bottom:6px}
+.wm span{display:inline-block;margin:2px 8px;font-weight:700}
+.kw{background:var(--ac);color:#fff;border-top:4px solid var(--ol);text-align:center;font-weight:700;font-size:.8rem;padding:5px;text-shadow:0 2px 0 var(--ol);letter-spacing:.04em}
+.sos{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.sos a{display:flex;align-items:center;gap:6px;background:var(--card);color:var(--fg);border:3px solid var(--ol);border-radius:999px;padding:3px 12px 3px 4px;font-weight:700;font-size:.9rem;text-decoration:none;box-shadow:0 3px 0 var(--ol)}
+.sos i{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;flex:none}
+.sos svg{width:18px;height:18px}
+.langkah{margin:0 0 12px;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:4px 12px;font-weight:600;font-size:.9rem}
+.note{background:var(--hi);color:#4a2a12;border:4px solid var(--ol);border-radius:16px;padding:10px 14px;font-weight:700;margin:0 0 16px;box-shadow:0 5px 0 var(--ol)}
+html,body{max-width:100%;overflow-x:hidden}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.inp input{font-size:16px}
+@media (max-width:520px){main{padding:12px}.out{-webkit-text-stroke:5px var(--ol)}h1{font-size:1.75rem}h2{font-size:1.3rem;-webkit-text-stroke:5px var(--ol)}.un{font-size:1.35rem;-webkit-text-stroke:5px var(--ol)}.pick{grid-template-columns:repeat(3,1fr);gap:8px}.pick button{font-size:.78rem;padding:4px}.go{padding:14px 10px;font-size:1.2rem;min-height:56px}.del,.dl{min-height:40px;padding:4px 12px;font-size:.85rem}.tema button{width:42px;height:42px}.cards{grid-template-columns:1fr}.panel{padding:12px}.sos a{font-size:.85rem}.wm b{font-size:1.25rem}}
+#toast{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--card);color:var(--fg);border:3px solid var(--ol);box-shadow:0 5px 0 var(--ol);padding:10px 16px;border-radius:14px;font-weight:600;z-index:5;max-width:90%}
+</style>
+</head>
+<body>
+<main>
+<h1 class="out">🐔 Daftar Ayam</h1>
+<p class="rib">FOLLOW ARENA AYAM</p>
+<div class="sos" id="sosTop"></div>
+<p class="sub">Isi username, pilih ayammu, lalu daftar. Kartu ayam langsung jadi.</p>
+<ul class="langkah"><li>1. Isi username</li><li>2. Pilih ayam</li><li>3. Daftar</li><li>4. Unduh gambar kartu</li><li>5. Kirim di kolom komentar</li></ul>
+<div class="tema" id="tema" role="radiogroup" aria-label="Pilih tema"><span>Tema:</span></div>
+<div id="toast" role="status"></div>
+<div class="panel">
+ <label for="un">Username</label>
+ <div class="inp"><span>@</span><input id="un" maxlength="20" autocomplete="off" placeholder="contoh: bayu_01"></div>
+ <p class="err" id="err" role="alert"></p>
+ <label style="margin-top:8px">Pilih ayam</label>
+ <div class="pick" id="pick" role="radiogroup" aria-label="Pilihan ayam"></div>
+ <button class="go" id="go">Daftarkan Ayam</button>
+</div>
+<h2>Kartu Ayam</h2>
+<div class="note" id="note" style="display:none">Kartu sudah jadi! Tekan <b>Unduh Gambar</b>, lalu kirim gambarnya di kolom komentar ya!</div>
+<div class="cards" id="cards"></div>
+<p class="empty" id="empty">Belum ada ayam terdaftar.</p>
+<footer class="wm"><b>Follow Arena Ayam!</b><div class="sos" id="sosBot" style="justify-content:center;margin:0"></div></footer>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const T=THREE;
+const M=c=>new T.MeshStandardMaterial({color:c,roughness:.85,flatShading:true});
+const mesh=(g,c,x=0,y=0,z=0,s)=>{const m=new T.Mesh(g,M(c));m.castShadow=m.receiveShadow=true;m.position.set(x,y,z);if(s)m.scale.set(...s);return m};
+const sph=(r,c,x,y,z,s)=>mesh(new T.SphereGeometry(r,16,12),c,x,y,z,s);
+const cyl=(a,b,h,c,x,y,z,n=16)=>mesh(new T.CylinderGeometry(a,b,h,n),c,x,y,z);
+const box=(w,h,d,c,x,y,z)=>mesh(new T.BoxGeometry(w,h,d),c,x,y,z);
+const cone=(r,h,c,x,y,z,n=12)=>mesh(new T.ConeGeometry(r,h,n),c,x,y,z);
+const tor=(r,t,c,x,y,z,arc=Math.PI*2)=>mesh(new T.TorusGeometry(r,t,8,32,arc),c,x,y,z);
+let bob=[];
+function label(t){const cv=document.createElement("canvas");cv.width=320;cv.height=80;const g=cv.getContext("2d");
+g.fillStyle="rgba(20,30,40,.88)";g.beginPath();g.roundRect?g.roundRect(4,8,312,64,28):g.rect(4,8,312,64);g.fill();
+g.fillStyle="#fff";g.font="bold 34px sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillText(t,160,42);
+const s=new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(cv),transparent:true,depthTest:false}));s.scale.set(1.8,.45,1);return s}
+
+const tc={};
+function ftex(c){if(tc[c])return tc[c];const cv=document.createElement("canvas");cv.width=cv.height=256;const x=cv.getContext("2d");
+x.fillStyle="#"+new T.Color(c).getHexString();x.fillRect(0,0,256,256);
+for(let i=0;i<700;i++){const px=Math.random()*256,py=Math.random()*256;x.strokeStyle=Math.random()<.5?"rgba(255,255,255,.13)":"rgba(0,0,0,.2)";x.lineWidth=1+Math.random()*1.5;x.beginPath();x.moveTo(px,py);x.lineTo(px+(Math.random()-.5)*6,py+20+Math.random()*50);x.stroke()}
+x.strokeStyle="rgba(0,0,0,.12)";for(let r=0;r<12;r++)for(let q=0;q<10;q++){x.beginPath();x.arc(q*26+(r%2)*13,r*22,14,0,Math.PI);x.stroke()}
+const t=new T.CanvasTexture(cv);t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(2,2);return tc[c]=t}
+const fm=c=>new T.MeshStandardMaterial({color:0xffffff,map:ftex(c),roughness:.62});
+const MS=(c,r=.6,map)=>{const o={color:c,roughness:r};if(map)o.map=map;return new T.MeshStandardMaterial(o)};
+const FG=new T.SphereGeometry(1,8,6);
+function chicken(o={}){
+const k=o.type||"";
+const Pal={"":[0xf7f7f2,0xeceae4,0xfbfbf8,0xe4e7ee,0xd63a2a],jago:[0xe8481c,0xd8381a,0x2b1a14,0x2c4a52,0xc8281e],bajak:[0x2f2f36,0x3d3d48,0x1c1c22,0x252a35,0xc62828],koki:[0xfff3d6,0xf3e6c4,0xfffaf0,0xe6dcc4,0xd63a2a],pahlawan:[0x2f6fd0,0x1f55a8,0xfff0d0,0xd32f2f,0xd63a2a],penyihir:[0x7e57c2,0x5e3fa3,0x3d2a6b,0x2b1f4d,0xd63a2a],koboi:[0xc68b4a,0xa66a2b,0x7a4a22,0x4a3220,0xd63a2a],punk:[0xff5fa2,0xe0357f,0x2b1a3a,0x39c5ff,0xd63a2a],ninja:[0x2a2f38,0x3b4250,0x15181e,0x1a2a30,0xc62828],gembul:[0xd9a441,0xb8742a,0x6b3f1f,0x4a3220,0xd04a2a],raja:[0xf3cf62,0xe9b13a,0xfff2d6,0xe8e8e8,0xd63a2a],kacamata:[0xf6efe0,0xe3d8c2,0xffffff,0x555a66,0xd63a2a]};
+const [hk,wg,br,tl,hd]=Pal[k]||Pal[""];
+const g=new T.Group(),b=new T.Group(),nk=new T.Group();g.add(b);b.add(nk);nk.position.set(0,1.4,.45);
+const mB=fm(br),mH=fm(hk),mW=fm(wg),mT=fm(tl),mR=fm(k===""?0xd9dde6:0xcc2a14),sk=MS(hd,.45),lg=MS(k===""?0xf2a93b:0xcfa86a,.5),blk=MS(0x111111,.2);
+const NK=[];
+const em=(r,m,x,y,z,sx=1,sy=1,sz=1,rx=0,par=b)=>{const e=new T.Mesh(new T.SphereGeometry(r,28,20),m);e.position.set(x,y,z);e.scale.set(sx,sy,sz);e.rotation.x=rx;e.castShadow=true;par.add(e);return e};
+const nm=(...a)=>{const e=em(...a);NK.push(e);return e};
+const add=m=>{b.add(m);NK.push(m);return m};
+em(1,mB,0,1.15,-.05,.52,.55,.85,-.35);em(1,mB,0,1.3,.5,.42,.4,.45);em(1,mH,0,1.55,-.4,.48,.3,.7,-.3);
+const N=[[0,1.5,.55,.4],[0,1.72,.7,.34],[0,1.95,.82,.29],[0,2.15,.94,.25]];
+N.forEach(n=>nm(n[3],mH,n[0],n[1],n[2]));
+for(let i=0;i<70;i++){const n0=N[Math.floor(Math.random()*4)],a=Math.random()*Math.PI*2,r=n0[3]*.95;
+const p=new T.Vector3(n0[0]+Math.cos(a)*r,n0[1]+Math.sin(a)*r*.6,n0[2]+Math.sin(a)*r*.4);
+const f=new T.Mesh(FG,mH);f.scale.set(.07,.015,.34);f.position.copy(p);f.lookAt(p.x*1.4,p.y-.5,p.z-.45);f.castShadow=true;add(f)}
+nm(1,sk,0,2.32,1.05,.2,.22,.3);
+const bk=new T.Mesh(new T.ConeGeometry(.07,.3,12),MS(k===""?0xf5b83a:0xe0c080,.4));bk.rotation.x=Math.PI/2;bk.position.set(0,2.27,1.38);add(bk);
+const W=[],L=[];
+[-1,1].forEach(s=>{
+nm(1,blk,s*.17,2.35,1.12,.045,.045,.045);nm(1,MS(0xc2701a,.4),s*.165,2.35,1.1,.06,.06,.03);
+nm(1,sk,s*.05,2.08,1.22,.045,.14,.05);nm(1,sk,s*.2,2.27,1,.05,.08,.06);
+const wp=new T.Group();wp.position.set(s*.45,1.5,.1);b.add(wp);
+const it=[em(1,mW,s*.5,1.22,-.1,.13,.42,.72,-.3)];it[0].rotation.z=s*.1;
+for(let i=0;i<16;i++){const r=Math.floor(i/4),c=i%4,f=new T.Mesh(FG,mW),p=new T.Vector3(s*.64,1.5-r*.17,.35-c*.2-r*.05);f.scale.set(.025,.12,.26);f.position.copy(p);f.lookAt(p.x+s*.05,p.y-.2,p.z-.5);b.add(f);it.push(f)}
+it.forEach(m=>wp.attach(m));W.push(wp);
+const lp=new T.Group();lp.position.set(s*.3,.85,0);g.add(lp);
+em(1,mB,0,0,0,.2,.3,.28,0,lp);
+const sh=new T.Mesh(new T.CylinderGeometry(.05,.065,.6,10),lg);sh.position.set(0,-.4,.05);sh.castShadow=true;lp.add(sh);
+for(let j=-1;j<=1;j++){const t=new T.Mesh(new T.CylinderGeometry(.03,.035,.35,6),lg);t.rotation.x=Math.PI/2;t.rotation.z=j*.35;t.position.set(j*.09,-.81,.2);lp.add(t)}
+const bt=new T.Mesh(new T.CylinderGeometry(.03,.035,.2,6),lg);bt.rotation.x=Math.PI/2;bt.position.set(0,-.81,-.1);lp.add(bt);L.push(lp);
+});
+for(let i=0;i<9;i++){const u=(i-4)/4,Lh=1+(i%2)*.08;
+const pts=(k===""?[[0,1.35,-.7],[u*.12,1.75,-1.0],[u*.3*Lh,2.15,-1.2*Lh],[u*.42,2.5,-1.25*Lh]]:[[0,1.35,-.7],[u*.1,1.9,-1.2],[u*.25*Lh,2.2,-1.7*Lh],[u*.35,2.05,-2.1*Lh],[u*.4,1.5,-2.3*Lh]]).map(a=>new T.Vector3(...a));
+const tb=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),24,(k===""?.075:.045)+(i%3)*.012,6,false),i%4===3?mR:mT);tb.scale.x=2.6;tb.castShadow=true;b.add(tb)}
+if(!["raja","koki","penyihir","koboi","punk"].includes(k)){const sh=new T.Shape();[[-.3,0],[-.28,.2],[-.2,.12],[-.15,.34],[-.07,.2],[0,.4],[.07,.2],[.15,.34],[.2,.14],[.28,.22],[.3,0]].forEach((p,i)=>i?sh.lineTo(p[0],p[1]):sh.moveTo(p[0],p[1]));
+const cm=new T.Mesh(new T.ExtrudeGeometry(sh,{depth:.06,bevelEnabled:false}),MS(0xd32f2f,.35));cm.rotation.y=Math.PI/2;cm.position.set(-.03,2.5,1.05);if(k==="")cm.scale.set(1,.75,.8);add(cm)}
+if(k==="ninja"){const h=new T.Mesh(new T.TorusGeometry(.23,.035,8,24),MS(0xd32f2f,.6));h.rotation.x=Math.PI/2;h.position.set(0,2.4,1);add(h);
+[.05,-.05].forEach((x,i)=>{const t=new T.Mesh(new T.BoxGeometry(.07,.3,.02),MS(0xd32f2f,.6));t.position.set(x,2.3-i*.05,.7);add(t)})}
+if(k==="raja"){const c=MS(0xffc107,.3),cr=new T.Mesh(new T.CylinderGeometry(.18,.15,.18,14),c);cr.position.set(0,2.62,1);add(cr);
+[-.1,0,.1].forEach(x=>{const t=new T.Mesh(new T.ConeGeometry(.045,.16,6),c);t.position.set(x,2.79,1);add(t)})}
+if(k==="kacamata"){[-1,1].forEach(s=>{const l=new T.Mesh(new T.CylinderGeometry(.08,.08,.03,14),blk);l.rotation.x=Math.PI/2;l.position.set(s*.17,2.36,1.14);add(l)});const b2=new T.Mesh(new T.BoxGeometry(.12,.025,.025),blk);b2.position.set(0,2.37,1.16);add(b2)}
+const A=(geo,m,x,y,z,rx=0,rz=0)=>{const e=new T.Mesh(geo,m);e.position.set(x,y,z);e.rotation.x=rx;e.rotation.z=rz;e.castShadow=true;return add(e)};
+const CY=(a,b2,h)=>new T.CylinderGeometry(a,b2,h,18),CO=(r,h)=>new T.ConeGeometry(r,h,12),SP=r=>new T.SphereGeometry(r,16,12);
+if(k==="bajak"){const rd=MS(0xc62828,.6);A(new T.TorusGeometry(.24,.045,8,24),rd,0,2.5,1,Math.PI/2);A(SP(.07),rd,.2,2.45,.8);A(CY(.1,.1,.03),blk,-.17,2.36,1.14,Math.PI/2)}
+if(k==="koki"){const w=MS(0xffffff,.7);A(CY(.2,.17,.3),w,0,2.72,1);[[0,3,1,.24],[.17,2.92,1,.16],[-.17,2.92,1,.16],[0,2.95,1.14,.15]].forEach(p=>A(SP(p[3]),w,p[0],p[1],p[2]))}
+if(k==="pahlawan"){A(new T.BoxGeometry(.46,.11,.05),MS(0x1f55a8,.5),0,2.37,1.1);const cp=new T.Mesh(new T.PlaneGeometry(1.1,1.2),new T.MeshStandardMaterial({color:0xd32f2f,roughness:.7,side:T.DoubleSide}));cp.position.set(0,1.5,-.45);cp.rotation.x=.35;cp.castShadow=true;b.add(cp)}
+if(k==="penyihir"){const p=MS(0x5e3fa3,.6);A(CY(.4,.4,.04),p,0,2.66,1,-.1);A(CO(.27,.7),p,0,3.02,.96,-.12);A(SP(.06),MS(0xffd54f,.3),0,3.05,1.12)}
+if(k==="koboi"){const q=MS(0x7a4a22,.7);A(CY(.45,.45,.04),q,0,2.64,1,-.12);A(CY(.2,.25,.24),q,0,2.76,1);A(CY(.26,.26,.05),blk,0,2.68,1)}
+if(k==="punk")for(let i=0;i<6;i++)A(CO(.07,.36),MS(i%2?0x39c5ff:0xff5fa2,.5),0,2.72-i*.04,1.12-i*.13);
+NK.forEach(m=>nk.attach(m));
+if(k==="gembul")b.scale.set(1.3,1.05,1.15);if(k==="")b.scale.set(1.12,1,1.08);
+g.userData.p={b,nk,w:W,lg:L};
+if(o.name){const l=label(o.name);l.position.y=3.3;g.add(l);g.userData.nm=o.name}
+g.scale.setScalar(o.s||.75);
+const ph=Math.random()*6;bob.push(t=>{b.position.y=Math.abs(Math.sin(t*2+ph))*.05;b.rotation.z=Math.sin(t*2+ph)*.025;W.forEach((w,i)=>w.rotation.z=(i?1:-1)*(.12+.05*Math.sin(t*2+ph)))});
+return g}
+function induk(o={}){
+const g=new T.Group(),b=new T.Group(),nk=new T.Group(),PI=Math.PI;g.add(b);
+const wh=MS(0xfbfaf6,.7),wn=MS(0xf1ede4,.7),rim=MS(0xd9c8ad,.8),red=MS(0xd8322a,.5),blk=MS(0x141212,.3),org=MS(0xf5a623,.55);
+const E=(r,m,x,y,z,sx=1,sy=1,sz=1,par=b)=>{const e=new T.Mesh(new T.SphereGeometry(r,28,20),m);e.position.set(x,y,z);e.scale.set(sx,sy,sz);e.castShadow=true;par.add(e);return e};
+E(.95,wh,0,1.3,-.05,1,.92,1.08);
+[-1,1].forEach(s=>{E(.64,rim,s*.82,1.36,-.05,.24,.74,.9);E(.6,wn,s*.85,1.38,-.05,.26,.7,.85)});
+// ekor mengembang bulat
+E(.45,wh,0,1.5,-.85,1,.9,.8);
+for(let i=-2;i<=2;i++){const m=E(.4,i%2?wn:wh,i*.27,1.95-Math.abs(i)*.1,-1.05,.5,1.35,.45);m.rotation.z=-i*.3;m.rotation.x=-.25}
+// kepala kecil bulat
+nk.position.set(0,1.9,.55);b.add(nk);
+E(.5,wh,0,.45,.15,1,1,1,nk);
+[-1,1].forEach(s=>E(.07,blk,s*.29,.52,.55,.8,1.1,.5,nk));
+[[.35,.93,.13],[.15,.99,.17],[-.03,.9,.12]].forEach(([z,y,r])=>E(r,red,0,y,z,.9,1,1,nk));
+E(.09,red,0,.12,.5,1,1.5,1,nk);
+const bk=new T.Mesh(new T.ConeGeometry(.11,.3,14),org);bk.rotation.x=PI/2;bk.position.set(0,.4,.78);bk.castShadow=true;nk.add(bk);
+// kaki oranye
+[-1,1].forEach(s=>{const lg=new T.Mesh(new T.CylinderGeometry(.06,.07,.5,10),org);lg.position.set(s*.3,.28,0);g.add(lg);
+ for(let j=-1;j<=1;j++){const t=new T.Mesh(new T.CylinderGeometry(.04,.045,.32,8),org);t.rotation.x=PI/2;t.rotation.z=j*.4;t.position.set(s*.3+j*.1,.05,.14);g.add(t)}});
+g.userData.p={b,nk,w:[],lg:[]};g.scale.setScalar(o.s||.75);
+const ph=Math.random()*6;bob.push(t=>{b.position.y=Math.abs(Math.sin(t*2+ph))*.04;b.rotation.z=Math.sin(t*2+ph)*.02});
+return g}
+
+
+
+const LIST=[["induk","Induk Putih","#8d6e63"],["jago","Ayam Jago","#e8481c"],["ninja","Ninja","#37474f"],["gembul","Gembul","#c68a2e"],["raja","Raja","#e0a800"],["kacamata","Kacamata","#546e7a"],["bajak","Bajak Laut","#b71c1c"],["koki","Koki","#ef6c00"],["pahlawan","Pahlawan Super","#1f55a8"],["penyihir","Penyihir","#6a3fb5"],["koboi","Koboi","#8d5524"],["punk","Punk","#d81b60"]];
+const photos={};let R=null;
+function shot(key){
+ if(photos[key])return photos[key];
+ if(!R){R=new T.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});R.setPixelRatio(1);R.setSize(360,360);R.setClearColor(0x000000,0)}
+ const sc=new T.Scene(),cam=new T.PerspectiveCamera(36,1,.1,100);
+ sc.add(new T.HemisphereLight(0xffffff,0x998877,1.05));
+ const d=new T.DirectionalLight(0xffffff,.9);d.position.set(4,8,7);sc.add(d);
+ const c=key==="induk"?induk({s:1}):chicken({type:key,s:1});
+ c.rotation.y=.55;sc.add(c);
+ cam.position.set(0,2.3,8.6);cam.lookAt(0,1.75,0);
+ R.render(sc,cam);
+ return photos[key]=R.domElement.toDataURL("image/png");
+}
+const $=id=>document.getElementById(id);
+let sel="induk",users=[],seq=0;
+try{const s=JSON.parse(localStorage.getItem("ayam-reg")||"{}");users=s.u||[];seq=s.n||0}catch(e){}
+const save=()=>{try{localStorage.setItem("ayam-reg",JSON.stringify({u:users,n:seq}))}catch(e){}};
+const info=k=>LIST.find(x=>x[0]===k)||LIST[0];
+function buildPick(){
+ const p=$("pick");
+ LIST.forEach(([k,n])=>{
+  const b=document.createElement("button");b.type="button";b.setAttribute("role","radio");b.dataset.k=k;
+  b.innerHTML='<div class="ph">…</div><span>'+n+'</span>';
+  b.onclick=()=>{sel=k;mark()};p.appendChild(b);
+ });
+ mark();
+ let i=0;(function nxt(){
+  if(i>=LIST.length){renderCards();return}
+  const k=LIST[i++][0],b=p.children[i-1];
+  try{const im=new Image();im.alt=info(k)[1];im.src=shot(k);b.replaceChild(im,b.firstChild)}catch(e){b.firstChild.textContent="🐔"}
+  setTimeout(nxt,20);
+ })();
+}
+function mark(){document.querySelectorAll("#pick button").forEach(b=>b.setAttribute("aria-checked",b.dataset.k===sel))}
+function renderCards(newId){
+ const box=$("cards");box.innerHTML="";
+ $("empty").style.display=users.length?"none":"block";
+ $("note").style.display=users.length?"block":"none";
+ users.slice().reverse().forEach(u=>{
+  const [,name,col]=info(u.k),el=document.createElement("div");
+  el.className="kartu"+(u.id===newId?" baru":"");el.style.setProperty("--c",col);
+  let src="";try{src=shot(u.k)}catch(e){}
+  el.innerHTML='<div class="kh"><span>KARTU AYAM</span><span>AYM-'+String(u.id).padStart(4,"0")+'</span></div>'+
+   '<div class="kp"><img alt="Foto '+name+'" src="'+src+'"></div>'+
+   '<div class="kb"><div class="un"></div><div class="jn">'+name+'</div><div class="meta"><span>'+u.d+'</span><span class="btns"><button class="dl" type="button">Unduh Gambar</button><button class="del" type="button">Hapus</button></span></div></div><div class="kw">FOLLOW ARENA AYAM • @arena.ayam</div>';
+  el.querySelector(".un").textContent="@"+u.n;
+  el.querySelector(".del").onclick=()=>{users=users.filter(x=>x.id!==u.id);save();renderCards()};
+  el.querySelector(".dl").onclick=()=>unduh(u);
+  box.appendChild(el);
+ });
+ if(newId)box.firstChild.scrollIntoView({behavior:"smooth",block:"center"});
+}
+$("go").onclick=()=>{
+ const v=$("un").value.trim().replace(/^@/,""),e=$("err");
+ if(!/^[A-Za-z0-9._]{3,20}$/.test(v)){e.textContent="Username 3-20 karakter: huruf, angka, titik, atau garis bawah.";return}
+ if(users.some(u=>u.n.toLowerCase()===v.toLowerCase())){e.textContent="Username sudah dipakai, coba yang lain.";return}
+ e.textContent="";
+ const u={id:++seq,n:v,k:sel,d:new Date().toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})};
+ users.push(u);save();renderCards(u.id);$("un").value="";toast("Ayam terdaftar! Tekan Unduh Gambar, lalu kirim di kolom komentar ya.");
+};
+$("un").addEventListener("keydown",e=>{if(e.key==="Enter")$("go").click()});
+let dlApi=null;
+try{window.claude&&claude.use&&claude.use("downloads").then(d=>{dlApi=d}).catch(()=>{})}catch(e){}
+function toast(t){const e=$("toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>{e.style.display="none"},5500)}
+async function unduh(u){
+  try{
+  const [,name,col]=info(u.k),cs=getComputedStyle(document.documentElement),g=n=>cs.getPropertyValue(n).trim();
+  const F='"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif';try{await document.fonts.load("700 28px Fredoka")}catch(e){}
+  const W=600,H=860,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+  const rr=()=>{x.beginPath();x.roundRect?x.roundRect(0,0,W,H,36):x.rect(0,0,W,H)};
+  rr();x.fillStyle=g("--card");x.fill();x.save();x.clip();
+  x.fillStyle=g("--bg");x.fillRect(0,64,W,580);
+  x.fillStyle=col;x.fillRect(0,0,W,64);
+  x.fillStyle="#fff";x.font="700 28px "+F;x.textBaseline="middle";x.textAlign="left";x.fillText("KARTU AYAM",24,34);
+  x.textAlign="right";x.fillText("AYM-"+String(u.id).padStart(4,"0"),W-24,34);
+  const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=shot(u.k)});
+  x.drawImage(im,40,84,520,520);
+  x.save();x.globalAlpha=.6;x.textAlign="right";x.lineJoin="round";x.font="700 30px "+F;x.lineWidth=8;x.strokeStyle=g("--ol");x.strokeText("@arena.ayam",552,584);x.fillStyle="#fff";x.fillText("@arena.ayam",552,584);x.restore();
+  const t="@"+u.n;let fs=60;x.textAlign="left";x.lineJoin="round";
+  x.font="700 "+fs+"px "+F;while(x.measureText(t).width>W-56&&fs>26){fs-=2;x.font="700 "+fs+"px "+F}
+  x.lineWidth=14;x.strokeStyle=g("--ol");x.strokeText(t,28,684);x.fillStyle=g("--hi");x.fillText(t,28,684);
+  x.fillStyle=g("--fg");x.font="600 28px "+F;x.fillText(name+"  |  "+u.d,28,740);
+  x.textAlign="center";x.fillStyle=g("--ac");x.fillRect(0,772,W,88);x.fillStyle=g("--ol");x.fillRect(0,768,W,6);
+  x.lineWidth=8;x.strokeStyle=g("--ol");x.font="700 34px "+F;x.strokeText("FOLLOW ARENA AYAM",W/2,806);x.fillStyle="#fff";x.fillText("FOLLOW ARENA AYAM",W/2,806);
+  const hl="TikTok @arena.ayam | IG @arenaa.ayam | YT @arena_ayam";let f2=22;x.font="600 "+f2+"px "+F;while(x.measureText(hl).width>W-40&&f2>12){f2--;x.font="600 "+f2+"px "+F}
+  x.lineWidth=5;x.strokeText(hl,W/2,840);x.fillStyle="#fff";x.fillText(hl,W/2,840);
+  x.restore();rr();x.lineWidth=14;x.strokeStyle=g("--ol");x.stroke();
+  const blob=await new Promise(ok=>c.toBlob(ok,"image/png"));
+  const fn="kartu-ayam-"+u.n+".png";if(dlApi)await dlApi.save({filename:fn,data:blob});else{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+  toast("Kartu tersimpan! Kirim gambarnya di kolom komentar ya.");
+ }catch(e){if(!e||e.code!=="declined")toast("Gagal mengunduh, coba lagi.")}
+}
+const TEMA=[["tikar","Kota Tikar","#ff8a1f"],["kardus","Kerajaan Kardus","#b8742a"],["malam","Kota Malam","#2b2145"]];
+function setTema(t){
+ document.documentElement.dataset.tema=t;
+ try{localStorage.setItem("ayam-tema",t)}catch(e){}
+ document.querySelectorAll("#tema button").forEach(b=>b.setAttribute("aria-checked",b.dataset.t===t));
+}
+TEMA.forEach(([k,n,c])=>{const b=document.createElement("button");b.type="button";b.dataset.t=k;b.title=n;b.setAttribute("role","radio");b.setAttribute("aria-label",n);b.style.setProperty("--s",c);b.onclick=()=>setTema(k);$("tema").appendChild(b)});
+let tm0="tikar";try{tm0=localStorage.getItem("ayam-tema")||tm0}catch(e){}
+setTema(TEMA.some(x=>x[0]===tm0)?tm0:"tikar");
+const SOS=[["TikTok","@arena.ayam","https://www.tiktok.com/@arena.ayam","#111",'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M14 4v9.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 4c.4 2.3 1.9 3.8 4.2 4"/></svg>'],["Instagram","@arenaa.ayam","https://www.instagram.com/arenaa.ayam","linear-gradient(45deg,#f9a825,#e91e63,#7b1fa2)",'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17" cy="7" r=".9" fill="#fff"/></svg>'],["YouTube","@arena_ayam","https://www.youtube.com/@arena_ayam","#f00",'<svg viewBox="0 0 24 24"><rect x="3" y="6.5" width="18" height="11" rx="3.5" fill="#fff"/><path d="M10 9.7v4.6l4-2.3z" fill="#f00"/></svg>']];
+["sosTop","sosBot"].forEach(id=>{$(id).innerHTML=SOS.map(([n,h,u,bg,sv])=>'<a href="'+u+'" target="_blank" rel="noopener noreferrer" aria-label="'+n+' '+h+'"><i style="background:'+bg+'">'+sv+'</i>'+h+'</a>').join("")});
+buildPick();
+</script>
+</body>
+</html>
