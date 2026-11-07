@@ -65,6 +65,7 @@ body{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;color:var(--dark)
 }
 #pv{position:fixed;inset:0;background:rgba(40,20,5,.85);z-index:50;display:flex;align-items:center;justify-content:center;padding:12px}#pv[hidden]{display:none}.pvb{background:var(--cream);border:4px solid var(--dark);border-radius:20px;padding:12px;width:min(94vw,440px);max-height:94dvh;overflow:auto;text-align:center;color:var(--dark)}.pvb img{width:100%;max-height:50dvh;object-fit:contain;border-radius:12px;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto}.pvb p{margin:8px 0;font-weight:600;font-size:.95rem}a.bt{display:inline-block;text-align:center;text-decoration:none}
 #toast{z-index:60}
+#ib{position:fixed;left:8px;right:8px;top:calc(8px + env(safe-area-inset-top,0px));z-index:45;background:var(--yel);color:var(--dark);border:3px solid var(--dark);border-radius:14px;padding:8px 10px;display:flex;gap:8px;align-items:center;font-weight:700;font-size:.85rem;box-shadow:0 4px 0 var(--dark)}#ib[hidden]{display:none}#ib span{flex:1}#ib button{font:inherit;font-weight:800;border:2px solid var(--dark);border-radius:10px;background:var(--cream);color:var(--dark);padding:4px 10px;flex:none}
 </style></head><body>
 <div class="app">
  <div id="v"><div class="logo">STUDIO <b>AYAM</b></div><div class="wm"><span><i class="ig">◎</i>@arenaa.ayam</span><span><i class="tt">♪</i>@arena.ayam</span><span><i class="yt">▶</i>@arena_ayam</span></div><div class="hint">Geser ke samping untuk memutar</div></div>
@@ -85,7 +86,8 @@ body{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;color:var(--dark)
   </div>
  </div>
 </div>
-<div id="pv" hidden><div class="pvb"><b>Kartu ayammu sudah jadi!</b><img id="pvi" alt="Kartu ayam"><p>Kalau belum terunduh: <b>tekan lama gambar</b>, lalu pilih <b>Simpan gambar</b>. Setelah itu kirim gambarnya di <b>kolom komentar</b> video.</p><div class="row"><a class="bt" id="pvd" download>Unduh</a><button class="bt alt" id="pvs" type="button">Bagikan</button><button class="bt alt" id="pvx" type="button">Tutup</button></div></div></div>
+<div id="ib" hidden><span id="ibt"></span><button id="ibg" type="button">Buka di Chrome</button><button id="ibx" type="button" aria-label="Tutup">✕</button></div>
+<div id="pv" hidden><div class="pvb"><b>Kartu ayammu sudah jadi!</b><img id="pvi" alt="Kartu ayam"><p><b>Tekan lama gambar</b> di atas, lalu pilih <b>Simpan gambar</b> (kalau belum terunduh sendiri). Setelah itu kirim gambarnya di <b>kolom komentar</b> video.</p><div class="row"><a class="bt" id="pvd" download>Unduh</a><button class="bt alt" id="pvs" type="button">Bagikan</button><button class="bt alt" id="pvx" type="button">Tutup</button></div></div></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -651,10 +653,15 @@ $("bCard").onclick=async()=>{let pr0=R.getPixelRatio();try{await document.fonts.
  R.setPixelRatio(pr0);fit();
  c.toBlob(b=>{if(!b){toast("Gagal membuat gambar, coba lagi.");return}
   const fn="ayam-"+(cleanName(st.name).replace("@","")||"ayam")+".png",du=c.toDataURL("image/png");
-  try{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}catch(e){}
+  if(!inApp)try{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}catch(e){}
   showPv(du,b,fn);
   toast("\u2705 Kartu ayam jadi! Kalau belum terunduh, tekan lama gambarnya lalu Simpan gambar. Setelah itu kirim di kolom komentar video.",9000)})}catch(e){R.setPixelRatio(pr0);fit();toast("Gagal membuat kartu, coba lagi. ("+(e&&e.message||e)+")")}};
-function showPv(du,b,fn){$("pvi").src=du;$("pvd").href=du;$("pvd").download=fn;$("pv").hidden=false;
+const UA=navigator.userAgent,inApp=/musical_ly|Bytedance|TikTok|Instagram|FBAN|FBAV|; wv\)/i.test(UA),isIOS=/iPhone|iPad|iPod/i.test(UA);
+if(inApp){$("ib").hidden=false;
+ if(isIOS){$("ibt").textContent="Ketuk titik tiga atau ikon Safari, lalu pilih Buka di browser.";$("ibg").style.display="none"}
+ else{$("ibt").textContent="Biar kartu bisa diunduh, buka di Chrome.";$("ibg").onclick=()=>{location.href="intent://"+location.host+location.pathname+"#Intent;scheme=https;package=com.android.chrome;end"}}
+ $("ibx").onclick=()=>{$("ib").hidden=true}}
+function showPv(du,b,fn){$("pvi").src=du;$("pvd").href=du;$("pvd").download=fn;$("pv").hidden=false;$("pvd").style.display=inApp?"none":"";
  $("pvs").onclick=async()=>{try{const f=new File([b],fn,{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:"Kartu Ayam"});else toast("Tombol bagikan tidak didukung di sini. Tekan lama gambarnya lalu Simpan gambar.")}catch(e){}};
  $("pvx").onclick=()=>{$("pv").hidden=true}}
 let tt;function toast(m,ms=9000){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("on"),ms)}
